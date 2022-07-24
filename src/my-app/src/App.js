@@ -1,16 +1,17 @@
 import './App.css';
 import {useState} from "react";
+import PokemonInfo from "./components/PokemonInfo"
 
 function App() {
   const [api, setApi] = useState([])
-
-  fetch('https://pokeapi.co/api/v2/pokemon')
+  const apiUrl = 'https://pokeapi.co/api/v2/pokemon';
+  fetch(apiUrl)
       .then(response => response.json())
       .then(data => setApi(data.results))
 
-  console.log(api[0].name)
   return (
     <div className="App">
+        <PokemonInfo api={api} />
 
     </div>
   );
