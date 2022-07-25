@@ -1,33 +1,48 @@
 import React from "react";
-import {useState} from "react";
-//
-export default function PokemonInfo({api}) {
-    const [photo, setPhoto] = useState({})
-    // const [obj, setObj] = useState({name: '', photo: ''})
-    const obj = {}
-    // let arr = []
-    const printPhoto = (
-            <div>
-                {api.map((item, index) => {
-                    fetch(`https://pokeapi.co/api/v2/pokemon/${index + 1}`)
-                        .then(response => response.json())
-                        .then(data => setPhoto(data.sprites.back_default))
-                    obj.name = item.name
-                    obj.photo = photo
-                    return (
-                        <div>
-                            <div>{obj.name}</div>
-                            <img src={obj.photo} alt={"pokemon"}/>
-                        </div>
+import {useState, useEffect} from "react";
 
-                    )
-                })}
-            </div>
-    )
+export default function PokemonInfo({item, index}) {
+
+    const [obj, setObj] = useState({name: "", photo: ""})
+    const [type, setType] = useState([])
+    const [count, setCount] = useState([])
+
+    useEffect(() => {
+            fetch(`https://pokeapi.co/api/v2/pokemon/${index + 1}`)
+                .then(response => response.json())
+                .then(data => {
+                    // console.log(data.sprites.back_default)
+                    // console.log('item', item)
+                    setObj(data.sprites.back_default)
+                    fetch(data.forms[0].url)
+                        .then(response => response.json())
+                        .then(data => {
+                            data.types.map((elem, i) => {
+                                console.log('i', i)
+                                type.push(data.types[i].type.name)
+                                setCount(i + 1)
+                            })
+                        })
+                })
+        }, [index])
 
     return (
-        <div>
-            <div> {printPhoto}</div>
-        </div>
+        <form>
+            <div>
+                <img src={obj} alt={"pokemon"}/>
+                <div>{item.name}</div>
+                {
+                    type.map((elem, index) => {
+                            return (
+                                <div>
+                                    <div>{elem}</div>
+                                </div>
+                            )
+                    })
+                }
+                <div>({count})</div>
+            </div>
+        </form>
+
     )
 }

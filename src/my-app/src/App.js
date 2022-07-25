@@ -11,8 +11,12 @@ function App() {
 
   return (
     <div className="App">
-        <PokemonInfo api={api} />
-
+      {
+        api.map((item, index) => {
+          // console.log(item)
+            return <PokemonInfo item={item} index={index}/>
+        })
+      }
     </div>
   );
 }
